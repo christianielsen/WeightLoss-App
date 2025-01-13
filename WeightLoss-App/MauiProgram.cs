@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
+using WeightLoss_App.Database;
+using WeightLoss_App.ViewModels;
+using WeightLoss_App.Views;
 
 namespace WeightLoss_App;
 
@@ -9,6 +13,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -18,6 +23,14 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
+
+        builder.Services.AddSingleton<Weight>();
+        builder.Services.AddSingleton<Meals>();
+        builder.Services.AddSingleton<Workout>();
+        builder.Services.AddSingleton<Settings>();
+        builder.Services.AddSingleton<WeightViewModel>();
+        
+        builder.Services.AddSingleton<WeightDatabase>();
 
         return builder.Build();
     }
