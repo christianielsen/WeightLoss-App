@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="WeightLoss_App.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:WeightLoss_App"
+    xmlns:views="clr-namespace:WeightLoss_App.Views">
+    <TabBar>
+        <Tab Title="Weight" Icon="weight.png">
+            <ShellContent ContentTemplate="{DataTemplate views:Weight}" />
+        </Tab>
+        <Tab Title="Meals" Icon="meals.png">
+            <ShellContent ContentTemplate="{DataTemplate views:Meals}" />
+        </Tab>
+        <Tab Title="Workout" Icon="workout.png">
+            <ShellContent ContentTemplate="{DataTemplate views:Workout}" />
+        </Tab>
+        <Tab Title="Settings" Icon="settings.png">
+            <ShellContent ContentTemplate="{DataTemplate views:Settings}" />
+        </Tab>
+    </TabBar>
+</Shell>
