@@ -2,12 +2,28 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:WeightLoss_App.ViewModels"
              x:Class="WeightLoss_App.Views.Weight">
-    
+
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Margin="10" Spacing="10">
             <Entry Text="{Binding Weight}" />
             <Button Text="Add Weight" Command="{Binding AddWeightCommand}" />
+            <CollectionView
+                ItemsSource="{Binding Weights}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding Weight}" />
+                            <Label Text="{Binding Date}" />
+                            <Button Text="Delete" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:WeightViewModel}}, Path=DeleteWeightCommand}"
+                                    CommandParameter="{Binding .}" />
+
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

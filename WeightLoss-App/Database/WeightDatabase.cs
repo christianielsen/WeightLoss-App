@@ -17,6 +17,8 @@ public class WeightDatabase
         if (Database is not null)
             return;
         Database = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
+
+        await Database.CreateTableAsync<WeightModel>();
     }
 
     public async Task<List<WeightModel>> GetWeightsAsync()

@@ -6,6 +6,7 @@ namespace WeightLoss_App.Models;
 public class WeightModel
 {
     [AutoIncrement]
+    [PrimaryKey]
     public int Id { get; set; }
     public double Weight { get; set; }
     public DateTime DateTime { get; set; } = DateTime.Now;
