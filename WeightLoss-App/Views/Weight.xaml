@@ -11,16 +11,27 @@
             <Button Text="Add Weight" Command="{Binding AddWeightCommand}" />
             <CollectionView
                 ItemsSource="{Binding Weights}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="{Binding Weight}" />
-                            <Label Text="{Binding Date}" />
-                            <Button Text="Delete" 
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:WeightViewModel}}, Path=DeleteWeightCommand}"
-                                    CommandParameter="{Binding .}" />
-
-                        </StackLayout>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItem Text="Delete"
+                                           IconImageSource="delete.png"
+                                           BackgroundColor="Red"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:WeightViewModel}}, Path=DeleteWeightCommand}"
+                                           CommandParameter="{Binding .}"/>
+                            </SwipeView.RightItems>
+                            <Border Stroke="{StaticResource Primary}"
+                                    StrokeShape="RoundRectangle 10,10,10,10">
+                                <Grid ColumnDefinitions="*, *, *" Margin="10">
+                                    <Label Grid.Column="0" Grid.ColumnSpan="1" Text="{Binding Weight, StringFormat='{0} Kg'}" FontSize="20" />
+                                    <Label Grid.Column="2" Text="{Binding DateTime, StringFormat='{0:dd/MM/yyyy}'}" FontSize="20" />
+                                </Grid>
+                            </Border>
+                        </SwipeView>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
