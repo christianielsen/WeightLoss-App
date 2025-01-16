@@ -1,6 +1,6 @@
 namespace WeightLoss_App.Database;
 
-public class Constants
+public static class Constants
 {
     public const string DatabaseFilename = "WeightLoss.db3";
 

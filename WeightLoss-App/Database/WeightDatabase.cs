@@ -9,7 +9,6 @@ public class WeightDatabase
 
     public WeightDatabase()
     {
-        
     }
 
     async Task Init()
@@ -24,20 +23,13 @@ public class WeightDatabase
     public async Task<List<WeightModel>> GetWeightsAsync()
     {
         await Init();
-        return await Database.Table<WeightModel>().ToListAsync();
+        return await Database.Table<WeightModel>().OrderBy(w => w.DateTime).ToListAsync();
     }
 
     public async Task<int> SaveWeightAsync(WeightModel weight)
     {
         await Init();
-        if (weight.Id != null)
-        {
-            return await Database.UpdateAsync(weight);
-        }
-        else
-        {
-            return await Database.InsertAsync(weight);
-        }
+        return await Database.InsertAsync(weight);
     }
 
     public async Task<int> DeleteWeightAsync(WeightModel weight)

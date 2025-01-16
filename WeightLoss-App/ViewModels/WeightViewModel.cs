@@ -1,4 +1,6 @@
 using System.Collections.ObjectModel;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WeightLoss_App.Database;
@@ -12,24 +14,26 @@ public partial class WeightViewModel : ObservableObject
     private double _weight;
     
     [ObservableProperty]
-    private ObservableCollection<WeightModel> _weights;
+    private ObservableCollection<WeightModel> _weights = new ObservableCollection<WeightModel>();
     
-    private WeightDatabase database;
+    WeightDatabase database;
     public WeightViewModel(WeightDatabase weightDatabase)
     {
         database = weightDatabase;
-        Weights = new ObservableCollection<WeightModel>();
-        LoadWeightsAsync().ConfigureAwait(false);
+        LoadWeightsAsync();
     }
 
     private async Task LoadWeightsAsync()
     {
         var weights = await database.GetWeightsAsync();
-        Weights.Clear();
-        foreach (var weight in weights)
+        MainThread.BeginInvokeOnMainThread(() =>
         {
-            Weights.Add(weight);
-        }
+            Weights.Clear();
+            foreach (var weight in weights)
+            {
+                Weights.Add(weight);
+            }
+        });
     }
 
     [RelayCommand]
@@ -41,9 +45,9 @@ public partial class WeightViewModel : ObservableObject
             return;
         }
 
-        var weightModel = new WeightModel { Weight = Weight };
-        await database.SaveWeightAsync(weightModel);
-        
+        var weightModel = new WeightModel { Weight = Weight, DateTime = DateTime.Now};
+        var Id = await database.SaveWeightAsync(weightModel);
+        Console.WriteLine(Id);
         Weights.Add(weightModel);
         
         Weight = 0;
