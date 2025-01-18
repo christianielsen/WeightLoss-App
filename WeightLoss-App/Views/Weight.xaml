@@ -3,16 +3,32 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:WeightLoss_App.ViewModels"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
              x:Class="WeightLoss_App.Views.Weight">
 
     <ContentPage.Content>
         <StackLayout Margin="10" Spacing="10">
+            <chart:SfCartesianChart HeightRequest="250">
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis IntervalType="Days"/>
+                </chart:SfCartesianChart.XAxes>
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis />
+                </chart:SfCartesianChart.YAxes>
+                <chart:LineSeries ItemsSource="{Binding Weights}"
+                                  XBindingPath="DateTime"
+                                  YBindingPath="Weight"
+                                  ShowDataLabels="True">
+                    <chart:LineSeries.StrokeWidth>3</chart:LineSeries.StrokeWidth>
+                </chart:LineSeries>
+            </chart:SfCartesianChart>
+
             <Entry Text="{Binding Weight}" />
             <Button Text="Add Weight" Command="{Binding AddWeightCommand}" />
             <CollectionView
                 ItemsSource="{Binding Weights}">
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="5" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>

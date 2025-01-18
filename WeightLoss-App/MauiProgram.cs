@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using Syncfusion.Maui.Core.Hosting;
 using WeightLoss_App.Database;
 using WeightLoss_App.ViewModels;
 using WeightLoss_App.Views;
@@ -18,7 +19,8 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            });
+            })
+            .ConfigureSyncfusionCore();
 
 #if DEBUG
         builder.Logging.AddDebug();

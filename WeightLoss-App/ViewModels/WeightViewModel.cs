@@ -1,6 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WeightLoss_App.Database;
@@ -14,12 +12,14 @@ public partial class WeightViewModel : ObservableObject
     private double _weight;
     
     [ObservableProperty]
-    private ObservableCollection<WeightModel> _weights = new ObservableCollection<WeightModel>();
+    private ObservableCollection<WeightModel> _weights;
     
-    WeightDatabase database;
+    private readonly WeightDatabase database;
+
     public WeightViewModel(WeightDatabase weightDatabase)
     {
         database = weightDatabase;
+        _weights = new ObservableCollection<WeightModel>();
         LoadWeightsAsync();
     }
 
@@ -29,7 +29,7 @@ public partial class WeightViewModel : ObservableObject
         MainThread.BeginInvokeOnMainThread(() =>
         {
             Weights.Clear();
-            foreach (var weight in weights)
+            foreach (var weight in weights.OrderBy(w => w.DateTime))
             {
                 Weights.Add(weight);
             }
@@ -39,16 +39,26 @@ public partial class WeightViewModel : ObservableObject
     [RelayCommand]
     private async Task AddWeight()
     {
-        if (Weight == 0)
+        if (Weight <= 0)
         {
-            await Shell.Current.DisplayAlert("Weight Required", "Please enter a valid weight", "OK");
+            await Shell.Current.DisplayAlert("Invalid Weight", "Please enter a valid weight greater than 0", "OK");
             return;
         }
 
-        var weightModel = new WeightModel { Weight = Weight, DateTime = DateTime.Now};
-        var Id = await database.SaveWeightAsync(weightModel);
-        Console.WriteLine(Id);
-        Weights.Add(weightModel);
+        var weightModel = new WeightModel 
+        { 
+            Weight = Weight, 
+            DateTime = DateTime.Now 
+        };
+
+        var id = await database.SaveWeightAsync(weightModel);
+        
+        // Insert the new weight in the correct position to maintain ordering
+        var insertIndex = Weights.ToList().FindIndex(w => w.DateTime > weightModel.DateTime);
+        if (insertIndex == -1)
+            Weights.Add(weightModel);
+        else
+            Weights.Insert(insertIndex, weightModel);
         
         Weight = 0;
     }
@@ -56,8 +66,16 @@ public partial class WeightViewModel : ObservableObject
     [RelayCommand]
     private async Task DeleteWeight(WeightModel weight)
     {
-        await database.DeleteWeightAsync(weight);
+        bool answer = await Shell.Current.DisplayAlert(
+            "Delete Weight",
+            "Are you sure you want to delete this weight entry?",
+            "Yes",
+            "No");
 
-        await LoadWeightsAsync();
+        if (answer)
+        {
+            await database.DeleteWeightAsync(weight);
+            Weights.Remove(weight);
+        }
     }
 }
