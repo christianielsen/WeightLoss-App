@@ -23,7 +23,7 @@ public class WeightDatabase
     public async Task<List<WeightModel>> GetWeightsAsync()
     {
         await Init();
-        return await Database.Table<WeightModel>().OrderBy(w => w.DateTime).ToListAsync();
+        return await Database.Table<WeightModel>().OrderBy(w => w.Id).ToListAsync();
     }
 
     public async Task<int> SaveWeightAsync(WeightModel weight)

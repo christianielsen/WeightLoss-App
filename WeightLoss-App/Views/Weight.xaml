@@ -7,10 +7,10 @@
              x:Class="WeightLoss_App.Views.Weight">
 
     <ContentPage.Content>
-        <StackLayout Margin="10" Spacing="10">
-            <chart:SfCartesianChart HeightRequest="250">
+        <Grid RowDefinitions="0.3*, 0.7*" Margin="10">
+            <chart:SfCartesianChart HeightRequest="250" Grid.Row="0" Margin="0, 20, 0, 20">
                 <chart:SfCartesianChart.XAxes>
-                    <chart:DateTimeAxis IntervalType="Days"/>
+                    <chart:DateTimeAxis IntervalType="Days" />
                 </chart:SfCartesianChart.XAxes>
                 <chart:SfCartesianChart.YAxes>
                     <chart:NumericalAxis />
@@ -22,35 +22,39 @@
                     <chart:LineSeries.StrokeWidth>3</chart:LineSeries.StrokeWidth>
                 </chart:LineSeries>
             </chart:SfCartesianChart>
-
-            <Entry Text="{Binding Weight}" />
-            <Button Text="Add Weight" Command="{Binding AddWeightCommand}" />
-            <CollectionView
-                ItemsSource="{Binding Weights}">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="5" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <SwipeView>
-                            <SwipeView.RightItems>
-                                <SwipeItem Text="Delete"
-                                           IconImageSource="delete.png"
-                                           BackgroundColor="Red"
-                                           Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:WeightViewModel}}, Path=DeleteWeightCommand}"
-                                           CommandParameter="{Binding .}"/>
-                            </SwipeView.RightItems>
-                            <Border Stroke="{StaticResource Primary}"
-                                    StrokeShape="RoundRectangle 10,10,10,10">
-                                <Grid ColumnDefinitions="*, *, *" Margin="10">
-                                    <Label Grid.Column="0" Grid.ColumnSpan="1" Text="{Binding Weight, StringFormat='{0} Kg'}" FontSize="20" />
-                                    <Label Grid.Column="2" Text="{Binding DateTime, StringFormat='{0:dd/MM/yyyy}'}" FontSize="20" />
-                                </Grid>
-                            </Border>
-                        </SwipeView>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </StackLayout>
+            <Grid Grid.Row="1" RowDefinitions="0.1*, 0.1*, 0.8*" RowSpacing="2">
+                <Entry Grid.Row="0" Text="{Binding Weight}" />
+                <Button Grid.Row="1" Text="Add Weight" Command="{Binding AddWeightCommand}" />
+                <CollectionView
+                    Grid.Row="2"
+                    ItemsSource="{Binding Weights}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="5" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItem Text="Delete"
+                                               IconImageSource="delete.png"
+                                               BackgroundColor="Red"
+                                               Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:WeightViewModel}}, Path=DeleteWeightCommand}"
+                                               CommandParameter="{Binding .}" />
+                                </SwipeView.RightItems>
+                                <Border Grid.Row="0" Stroke="{StaticResource Primary}"
+                                        StrokeShape="RoundRectangle 10,10,10,10">
+                                    <Grid ColumnDefinitions="*, *, *" Margin="10">
+                                        <Label Grid.Column="0" Grid.ColumnSpan="1"
+                                               Text="{Binding Weight, StringFormat='{0} Kg'}" FontSize="20" />
+                                        <Label Grid.Column="2" Text="{Binding DateTime, StringFormat='{0:dd/MM/yyyy}'}"
+                                               FontSize="20" />
+                                    </Grid>
+                                </Border>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
