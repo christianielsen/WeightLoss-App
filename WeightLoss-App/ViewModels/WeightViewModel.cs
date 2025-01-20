@@ -13,6 +13,8 @@ public partial class WeightViewModel : ObservableObject
     
     [ObservableProperty]
     private ObservableCollection<WeightModel> _weights;
+
+    [ObservableProperty] private double _change;
     
     private readonly WeightDatabase database;
 
@@ -33,6 +35,8 @@ public partial class WeightViewModel : ObservableObject
             {
                 Weights.Add(weight);
             }
+
+            CalculateChange();
         });
     }
 
@@ -76,6 +80,33 @@ public partial class WeightViewModel : ObservableObject
         {
             await database.DeleteWeightAsync(weight);
             Weights.Remove(weight);
+            CalculateChange();
         }
+    }
+
+    private void CalculateChange()
+    {
+        if (Weights.Count == 0)
+        {
+            Change = 0;
+            return;
+        }
+        
+        var mostRecentWeight = Weights.OrderByDescending(w => w.DateTime).First();
+
+        var sevenDaysAgo = DateTime.Now.AddDays(-7);
+        var closestWeight = Weights
+            .Where(w => w.DateTime <= sevenDaysAgo)
+            .OrderByDescending(w => w.DateTime)
+            .FirstOrDefault();
+
+        // If no weight exists for 7 days ago, fallback to the oldest weight
+        if (closestWeight == null)
+        {
+            closestWeight = Weights.OrderBy(w => w.DateTime).First();
+        }
+        
+        Change = Math.Round(mostRecentWeight.Weight - closestWeight.Weight, 2);
+
     }
 }

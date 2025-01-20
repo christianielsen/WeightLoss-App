@@ -7,8 +7,9 @@
              x:Class="WeightLoss_App.Views.Weight">
 
     <ContentPage.Content>
-        <Grid RowDefinitions="0.3*, 0.7*" Margin="10">
-            <chart:SfCartesianChart HeightRequest="250" Grid.Row="0" Margin="0, 20, 0, 20">
+        <Grid RowDefinitions="0.1*, 0.3*, 0.6*" Margin="10">
+            <Label Grid.Row="0" Text="{Binding Change, StringFormat='Weekly change: {0} Kg'}"/>
+            <chart:SfCartesianChart HeightRequest="200" Grid.Row="1" Margin="0, 20, 0, 20">
                 <chart:SfCartesianChart.XAxes>
                     <chart:DateTimeAxis IntervalType="Days" />
                 </chart:SfCartesianChart.XAxes>
@@ -22,7 +23,7 @@
                     <chart:LineSeries.StrokeWidth>3</chart:LineSeries.StrokeWidth>
                 </chart:LineSeries>
             </chart:SfCartesianChart>
-            <Grid Grid.Row="1" RowDefinitions="0.1*, 0.1*, 0.8*" RowSpacing="2">
+            <Grid Grid.Row="2" RowDefinitions="0.1*, 0.1*, *" RowSpacing="2">
                 <Entry Grid.Row="0" Text="{Binding Weight}" />
                 <Button Grid.Row="1" Text="Add Weight" Command="{Binding AddWeightCommand}" />
                 <CollectionView
